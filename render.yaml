@@ -1,0 +1,16 @@
+# Render blueprint for the API. Import this repo at render.com and it will
+# create the service; set MONGODB_URI and CORS_ORIGIN in the dashboard.
+services:
+  - type: web
+    name: expense-tracker-api
+    runtime: node
+    rootDir: server
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: MONGODB_URI
+        sync: false
+      - key: CORS_ORIGIN
+        sync: false
