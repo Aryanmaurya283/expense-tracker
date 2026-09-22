@@ -9,6 +9,12 @@ import mongoose from "mongoose";
  */
 const expenseSchema = new mongoose.Schema(
   {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+      index: true,
+    },
     amountPaise: {
       type: Number,
       required: [true, "Amount is required"],
@@ -43,7 +49,8 @@ const expenseSchema = new mongoose.Schema(
 );
 
 /** The list is always read newest first, so index for exactly that. */
-expenseSchema.index({ date: -1 });
+/** Every query is "this user's expenses, newest first" — index exactly that. */
+expenseSchema.index({ userId: 1, date: -1 });
 
 /** Never leak Mongo's internals to the client; hand back a clean shape. */
 expenseSchema.set("toJSON", {
